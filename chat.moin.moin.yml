@@ -4,15 +4,11 @@ runtime-version: '26.08'
 sdk: org.freedesktop.Sdk
 command: moin
 finish-args:
-  # Single-instance handoff and Wayland/X11 clients need the shared IPC namespace.
   - --share=ipc
-  # Peer-to-peer calls and the coordinator connection.
   - --share=network
   - --socket=wayland
   - --socket=fallback-x11
-  # Microphone capture and playback.
   - --socket=pulseaudio
-  # GPU: rendering, plus VAAPI/NVENC hardware video. Also exposes /dev/nvidia*.
   - --device=dri
 modules:
   - name: moin
@@ -22,8 +18,6 @@ modules:
       - cp -a lib/moin/. /app/chat.moin.moin/
       - cp -a share /app/
       - install -d /app/bin
-      # The Flutter runner resolves data/ and lib/ from its own path, and the
-      # executable keeps RPATH $ORIGIN/lib, so a symlink is enough.
       - ln -s /app/chat.moin.moin/moin_flutter /app/bin/moin
     sources:
       - type: archive
